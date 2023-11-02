@@ -1,10 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+//Imports//
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider,} from "react-router-dom";
+import Navbar from "./Navbar/Navbar";
 
-ReactDOM.render(
+const router = createBrowserRouter([{
+    path: "/",
+    element: <Navbar />,
+  },
+]);
+
+//dont delete
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
