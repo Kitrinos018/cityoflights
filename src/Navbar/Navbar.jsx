@@ -4,7 +4,7 @@ import "./Navbar.css"; //Navbar.css is being used here
 function Navbar() {
   return (
     <div class="topnav">
-      <a class="active" href="#home">Home</a>
+      <Link to="/HomePage" className="active">Home</Link>
       <a href="#news">Attractions</a>
       <a href="#contact">Food & Drink</a>
       <a href="#about">Contact Us</a>
