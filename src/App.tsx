@@ -1,12 +1,14 @@
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Outlet, Link, Form } from "react-router-dom";
 import '../src/css/contact.css';
 import '../src/css/attractions.css';
 import '../src/css/food.css';
 import '../src/css/home.css';
+import axios from "axios"
+import { useEffect, useState } from "react";
 
 export default function App() {
+
   return (
-    <div>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -14,19 +16,16 @@ export default function App() {
           <Route path="attractions" element={<Attractions />} />
           <Route path="food" element={<Food />} />
           <Route path="contact" element={<Contact />} />
-          
-          {/* Error page babyyyyy*/}
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>
-    </div>
   );
 }
 
 function Layout() {
   return (
+    
     <div>
-      {/* Navbar (User Link instead of href!) */}
       <nav>
       <div className="topnav">
         <Link to="/">Home</Link>
@@ -74,12 +73,44 @@ function Attractions() {
 }
 
 function Tickets() {
+
+    const [data, setData] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const getData = async () => {
+          try {
+            const response = await axios.get(
+              `http://localhost:3002/tickets`
+            );
+            console.log(response);
+            setData(response.data[0].reserved);
+            setError(null);
+          } finally {
+            setLoading(false);
+          }
+        };
+        getData();
+      }, []);
+
+    const handleUpdate = async() => {
+        const response = await axios.put(`http://localhost:3002/`);
+        window.location.reload()
+      }
+
   return (
     <div id="tickets">
       <div className="main-content">
-        <h1>Buy Tickets Here</h1>
-        <button>Buy Now</button>
-        {/*button stuff goes here*/}
+        <h1>Reserve Tickets Here!</h1>
+        {loading && <div>A moment please...</div>}
+      {error && (
+        <div>{`There is a problem fetching the post data - ${error}`}</div>
+      )}
+      <ul>
+        Current number of tickets reserved: {data}
+      </ul>
+        <input type="button" name="reserve" value="Reserve" onClick={handleUpdate}/>
       </div>
     </div>
   );
@@ -133,22 +164,6 @@ function Contact() {
           <p>Email: iseage@amusementpark.com</p>
           <p>Phone: +1 (561) 935-1617 </p>
           <p>Address: Ames, IA 50011</p>
-        </div>
-
-        <div className="contact-form">
-          <h2>Contact Form</h2>
-          <form>
-            <label>Name:</label>
-            <input type="text" />
-
-            <label>Email:</label>
-            <input type="email" />
-
-            <label>Message:</label>
-            <textarea rows="4"></textarea>
-
-            <button type="submit">Submit</button>
-          </form>
         </div>
       </div>
     </div>
